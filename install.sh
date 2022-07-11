@@ -85,10 +85,10 @@ install_base() {
 
 # 0: running, 1: not running, 2: not installed
 check_status() {
-    if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
+    if [[ ! -f /etc/systemd/system/Aiko.service ]]; then
         return 2
     fi
-    temp=$(systemctl status XrayR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    temp=$(systemctl status Aiko | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
     if [[ x"${temp}" == x"running" ]]; then
         return 0
     else
@@ -100,91 +100,91 @@ install_acme() {
     curl https://get.acme.sh | sh
 }
 
-install_XrayR() {
-    if [[ -e /usr/local/XrayR/ ]]; then
-        rm /usr/local/XrayR/ -rf
+install_Aiko() {
+    if [[ -e /usr/local/Aiko/ ]]; then
+        rm /usr/local/Aiko/ -rf
     fi
 
-    mkdir /usr/local/XrayR/ -p
-	cd /usr/local/XrayR/
+    mkdir /usr/local/Aiko/ -p
+	cd /usr/local/Aiko/
     
     if  [ $# == 0 ] ;then
-        last_version=$(curl -Ls "https://api.github.com/repos/AikoXrayR-Project/XrayR/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        last_version=$(curl -Ls "https://api.github.com/repos/AikoAiko-Project/Aiko/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
-            echo -e "${red}Phát hiện phiên bản XrayR không thành công, có thể vượt quá giới hạn GIthub API, vui lòng thử lại sau hoặc chỉ định cài đặt phiên bản XrayR theo cách thủ công${plain}"
+            echo -e "${red}Phát hiện phiên bản Aiko không thành công, có thể vượt quá giới hạn GIthub API, vui lòng thử lại sau hoặc chỉ định cài đặt phiên bản Aiko theo cách thủ công${plain}"
             exit 1
         fi
-        echo -e "Phiên bản mới nhất của XrayR đã được phát hiện：${last_version}，Bắt đầu cài đặt"
-        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip https://github.com/AikoXrayR-Project/XrayR/releases/download/1.0.2/XrayR-linux-${arch}.zip
+        echo -e "Phiên bản mới nhất của Aiko đã được phát hiện：${last_version}，Bắt đầu cài đặt"
+        wget -N --no-check-certificate -O /usr/local/Aiko/Aiko-linux.zip https://github.com/AikoAiko-Project/Aiko/releases/download/1.0.2/Aiko-linux-${arch}.zip
         if [[ $? -ne 0 ]]; then
-            echo -e "${red}Tải xuống XrayR thất bại, hãy chắc chắn rằng máy chủ của bạn có thể tải về các tập tin Github${plain}"
+            echo -e "${red}Tải xuống Aiko thất bại, hãy chắc chắn rằng máy chủ của bạn có thể tải về các tập tin Github${plain}"
             exit 1
         fi
     else
         last_version=$1
-        url="https://github.com/AikoXrayR-Project/XrayR/releases/download/1.0.2/XrayR-linux-${arch}.zip"
-        echo -e "Bắt đầu cài đặt XrayR v$1"
-        wget -N --no-check-certificate -O /usr/local/XrayR/XrayR-linux.zip ${url}
+        url="https://github.com/AikoAiko-Project/Aiko/releases/download/1.0.2/Aiko-linux-${arch}.zip"
+        echo -e "Bắt đầu cài đặt Aiko v$1"
+        wget -N --no-check-certificate -O /usr/local/Aiko/Aiko-linux.zip ${url}
         if [[ $? -ne 0 ]]; then
-            echo -e "${red}Tải xuống XrayR v$1 Thất bại, hãy chắc chắn rằng phiên bản này tồn tại${plain}"
+            echo -e "${red}Tải xuống Aiko v$1 Thất bại, hãy chắc chắn rằng phiên bản này tồn tại${plain}"
             exit 1
         fi
     fi
 
-    unzip XrayR-linux.zip
-    rm XrayR-linux.zip -f
-    chmod +x XrayR
-    mkdir /etc/XrayR/ -p
-    rm /etc/systemd/system/XrayR.service -f
-    file="https://raw.githubusercontent.com/AikoXrayR-Project/AikoXrayR-install/main/XrayR.service"
-    wget -N --no-check-certificate -O /etc/systemd/system/XrayR.service ${file}
-    #cp -f XrayR.service /etc/systemd/system/
+    unzip Aiko-linux.zip
+    rm Aiko-linux.zip -f
+    chmod +x Aiko
+    mkdir /etc/Aiko/ -p
+    rm /etc/systemd/system/Aiko.service -f
+    file="https://raw.githubusercontent.com/AikoAiko-Project/AikoAiko-install/main/Aiko.service"
+    wget -N --no-check-certificate -O /etc/systemd/system/Aiko.service ${file}
+    #cp -f Aiko.service /etc/systemd/system/
     systemctl daemon-reload
-    systemctl stop XrayR
-    systemctl enable XrayR
-    echo -e "${green}XrayR ${last_version}${plain} Quá trình cài đặt hoàn tất, nó đã được thiết lập để bắt đầu tự động"
-    cp geoip.dat /etc/XrayR/
-    cp geosite.dat /etc/XrayR/ 
+    systemctl stop Aiko
+    systemctl enable Aiko
+    echo -e "${green}Aiko ${last_version}${plain} Quá trình cài đặt hoàn tất, nó đã được thiết lập để bắt đầu tự động"
+    cp geoip.dat /etc/Aiko/
+    cp geosite.dat /etc/Aiko/ 
 
-    if [[ ! -f /etc/XrayR/config.yml ]]; then
-        cp config.yml /etc/XrayR/
+    if [[ ! -f /etc/Aiko/config.yml ]]; then
+        cp config.yml /etc/Aiko/
         echo -e ""
-        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/AikoCute/XrayR，Định cấu hình nội dung cần thiết"
+        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/AikoCute/Aiko，Định cấu hình nội dung cần thiết"
     else
-        systemctl start XrayR
+        systemctl start Aiko
         sleep 2
         check_status
         echo -e ""
         if [[ $? == 0 ]]; then
-            echo -e "${green}XrayR khởi động lại thành công${plain}"
+            echo -e "${green}Aiko khởi động lại thành công${plain}"
         else
-            echo -e "${red}XrayR Có thể không khởi động được, vui lòng sử dụng sau XrayR log Kiểm tra thông tin nhật ký, nếu không khởi động được, định dạng cấu hình có thể đã bị thay đổi, vui lòng vào wiki để kiểm tra：https://github.com/herotbty/Aiko-XrayR/wiki${plain}"
+            echo -e "${red}Aiko Có thể không khởi động được, vui lòng sử dụng sau Aiko log Kiểm tra thông tin nhật ký, nếu không khởi động được, định dạng cấu hình có thể đã bị thay đổi, vui lòng vào wiki để kiểm tra：https://github.com/herotbty/Aiko-Aiko/wiki${plain}"
         fi
     fi
 
-    if [[ ! -f /etc/XrayR/dns.json ]]; then
-        cp dns.json /etc/XrayR/
+    if [[ ! -f /etc/Aiko/dns.json ]]; then
+        cp dns.json /etc/Aiko/
     fi
-    if [[ ! -f /etc/XrayR/route.json ]]; then
-        cp route.json /etc/XrayR/
+    if [[ ! -f /etc/Aiko/route.json ]]; then
+        cp route.json /etc/Aiko/
     fi
-    if [[ ! -f /etc/XrayR/custom_outbound.json ]]; then
-        cp custom_outbound.json /etc/XrayR/
+    if [[ ! -f /etc/Aiko/custom_outbound.json ]]; then
+        cp custom_outbound.json /etc/Aiko/
     fi
-    curl -o /usr/bin/XrayR -Ls https://raw.githubusercontent.com/AikoCute/AikoXrayR-install/master/XrayR.sh
-    chmod +x /usr/bin/XrayR
-    ln -s /usr/bin/XrayR /usr/bin/xrayr # chữ thường tương thích
-    chmod +x /usr/bin/xrayr
+    curl -o /usr/bin/Aiko -Ls https://raw.githubusercontent.com/AikoCute/AikoAiko-install/master/Aiko.sh
+    chmod +x /usr/bin/Aiko
+    ln -s /usr/bin/Aiko /usr/bin/Aiko # chữ thường tương thích
+    chmod +x /usr/bin/Aiko
 
     echo -e ""
-    echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
+    echo "  Cách sử dụng tập lệnh quản lý Aiko     " 
     echo "------------------------------------------"
-    echo "           XrayR   - Show admin menu      "
-    echo "         AikoXrayR - XrayR by AikoCute    "
+    echo "           Aiko   - Show admin menu      "
+    echo "         AikoAiko - Aiko by AikoCute    "
     echo "------------------------------------------"
 }
 
 echo -e "${green}bắt đầu cài đặt${plain}"
 install_base
 install_acme
-install_XrayR $1
+install_Aiko $1

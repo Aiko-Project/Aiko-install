@@ -70,7 +70,7 @@ confirm() {
 }
 
 confirm_restart() {
-    confirm "Có khởi động lại XrayR không" "y"
+    confirm "Có khởi động lại Aiko không" "y"
     if [[ $? == 0 ]]; then
         restart
     else
@@ -84,7 +84,7 @@ before_show_menu() {
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/AikoXrayR-install/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/Aiko-Project/Aiko-install/master/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -108,9 +108,9 @@ update() {
 #        fi
 #        return 0
 #    fi
-    bash <(curl -Ls https://raw.githubusercontent.com/AikoCute/AikoXrayR-install/master/XrayR.sh) $version
+    bash <(curl -Ls https://raw.githubusercontent.com/Aiko-Project/Aiko-install/master/Aiko.sh) $version
     if [[ $? == 0 ]]; then
-        echo -e "${green}Cập nhật hoàn tất, XrayR đã được khởi động lại tự động, vui lòng sử dụng XrayR logs dể xem thành quả${plain}"
+        echo -e "${green}Cập nhật hoàn tất, Aiko đã được khởi động lại tự động, vui lòng sử dụng Aiko logs dể xem thành quả${plain}"
         exit
     fi
 
@@ -120,16 +120,16 @@ update() {
 }
 
 config() {
-    echo "XrayR sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
-    nano /etc/XrayR/config.yml
+    echo "Aiko sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
+    nano /etc/Aiko/config.yml
     sleep 2
     check_status
     case $? in
         0)
-            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+            echo -e "Trạng thái Aiko: ${green}đã được chạy${plain}"
             ;;
         1)
-            echo -e "Nó được phát hiện rằng bạn không khởi động XrayR hoặc XrayR không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
+            echo -e "Nó được phát hiện rằng bạn không khởi động Aiko hoặc Aiko không tự khởi động lại, hãy kiểm tra nhật ký？[Y/n]" && echo
             read -e -p "(yes or no):" yn
             [[ -z ${yn} ]] && yn="y"
             if [[ ${yn} == [Yy] ]]; then
@@ -137,26 +137,26 @@ config() {
             fi
             ;;
         2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+            echo -e "Trạng thái Aiko: ${red}Chưa cài đặt${plain}"
     esac
 }
 
 uninstall() {
-    confirm "Bạn có chắc chắn muốn gỡ cài đặt XrayR không?" "n"
+    confirm "Bạn có chắc chắn muốn gỡ cài đặt Aiko không?" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
         fi
         return 0
     fi
-    systemctl stop XrayR
-    systemctl disable XrayR
-    rm /etc/systemd/system/XrayR.service -f
+    systemctl stop Aiko
+    systemctl disable Aiko
+    rm /etc/systemd/system/Aiko.service -f
     systemctl daemon-reload
     systemctl reset-failed
-    rm /etc/XrayR/ -rf
-    rm /usr/local/XrayR/ -rf
-    rm /usr/bin/XrayR -f
+    rm /etc/Aiko/ -rf
+    rm /usr/local/Aiko/ -rf
+    rm /usr/bin/Aiko -f
 
     echo ""
     echo -e "${green}Gỡ cài đặt thành công, Đã gỡ cài đặt toàn bộ ra khỏi hệ thống${plain}"
@@ -171,15 +171,15 @@ start() {
     check_status
     if [[ $? == 0 ]]; then
         echo ""
-        echo -e "${green}XrayR đã chạy rồi, Muốn reset thì chạy lệnh : XrayR restart ${plain}"
+        echo -e "${green}Aiko đã chạy rồi, Muốn reset thì chạy lệnh : Aiko restart ${plain}"
     else
-        systemctl start XrayR
+        systemctl start Aiko
         sleep 2
         check_status
         if [[ $? == 0 ]]; then
-            echo -e "${green} XrayR đã khởi động thành công <AikoCuteHotMe>${plain}"
+            echo -e "${green} Aiko đã khởi động thành công <AikoCuteHotMe>${plain}"
         else
-            echo -e "${red}XrayR có thể không khởi động được, Sài XrayR logs để check lỗi ${plain}"
+            echo -e "${red}Aiko có thể không khởi động được, Sài Aiko logs để check lỗi ${plain}"
         fi
     fi
 
@@ -189,13 +189,13 @@ start() {
 }
 
 stop() {
-    systemctl stop XrayR
+    systemctl stop Aiko
     sleep 2
     check_status
     if [[ $? == 1 ]]; then
-        echo -e "${green}XrayR đã Stop thành công < Cute hotme >${plain}"
+        echo -e "${green}Aiko đã Stop thành công < Cute hotme >${plain}"
     else
-        echo -e "${red}XrayR không Stop được, có thể do thời gian dừng vượt quá hai giây, vui lòng kiểm tra Logs để xem nguyên nhân ${plain}"
+        echo -e "${red}Aiko không Stop được, có thể do thời gian dừng vượt quá hai giây, vui lòng kiểm tra Logs để xem nguyên nhân ${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -204,13 +204,13 @@ stop() {
 }
 
 restart() {
-    systemctl restart XrayR
+    systemctl restart Aiko
     sleep 2
     check_status
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR đã khởi động lại thành công, vui lòng sử dụng XrayR Logs để xem nhật ký đang chạy${plain}"
+        echo -e "${green}Aiko đã khởi động lại thành công, vui lòng sử dụng Aiko Logs để xem nhật ký đang chạy${plain}"
     else
-        echo -e "${red}XrayR có thể không khởi động được, vui lòng sử dụng XrayR Logs để xem thông tin nhật ký sau này${plain}"
+        echo -e "${red}Aiko có thể không khởi động được, vui lòng sử dụng Aiko Logs để xem thông tin nhật ký sau này${plain}"
     fi
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -218,18 +218,18 @@ restart() {
 }
 
 status() {
-    systemctl status XrayR --no-pager -l
+    systemctl status Aiko --no-pager -l
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
 }
 
 enable() {
-    systemctl enable XrayR
+    systemctl enable Aiko
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR được thiết lập để khởi động thành công${plain}"
+        echo -e "${green}Aiko được thiết lập để khởi động thành công${plain}"
     else
-        echo -e "${red}Thiết lập XrayR không thể tự động khởi động khi khởi động${plain}"
+        echo -e "${red}Thiết lập Aiko không thể tự động khởi động khi khởi động${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -238,11 +238,11 @@ enable() {
 }
 
 disable() {
-    systemctl disable XrayR
+    systemctl disable Aiko
     if [[ $? == 0 ]]; then
-        echo -e "${green}XrayR đã hủy khởi động tự động khởi động thành công${plain}"
+        echo -e "${green}Aiko đã hủy khởi động tự động khởi động thành công${plain}"
     else
-        echo -e "${red}XrayR không thể hủy tự động khởi động khởi động${plain}"
+        echo -e "${red}Aiko không thể hủy tự động khởi động khởi động${plain}"
     fi
 
     if [[ $# == 0 ]]; then
@@ -251,7 +251,7 @@ disable() {
 }
 
 show_log() {
-    journalctl -u XrayR.service -e --no-pager -f
+    journalctl -u Aiko.service -e --no-pager -f
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
@@ -271,23 +271,23 @@ install_bbr() {
 }
 
 update_shell() {
-    wget -O /usr/bin/XrayR -N --no-check-certificate https://raw.githubusercontent.com/AikoCute/AikoXrayR-install/master/XrayR.sh
+    wget -O /usr/bin/Aiko -N --no-check-certificate https://raw.githubusercontent.com/Aiko-Project/Aiko-install/master/Aiko.sh
     if [[ $? != 0 ]]; then
         echo ""
         echo -e "${red}Không tải được script xuống, vui lòng kiểm tra xem máy có thể kết nối với Github không${plain}"
         before_show_menu
     else
-        chmod +x /usr/bin/XrayR
+        chmod +x /usr/bin/Aiko
         echo -e "${green}Tập lệnh nâng cấp thành công, vui lòng chạy lại tập lệnh${plain}" && exit 0
     fi
 }
 
 # 0: running, 1: not running, 2: not installed
 check_status() {
-    if [[ ! -f /etc/systemd/system/XrayR.service ]]; then
+    if [[ ! -f /etc/systemd/system/Aiko.service ]]; then
         return 2
     fi
-    temp=$(systemctl status XrayR | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
+    temp=$(systemctl status Aiko | grep Active | awk '{print $3}' | cut -d "(" -f2 | cut -d ")" -f1)
     if [[ x"${temp}" == x"running" ]]; then
         return 0
     else
@@ -296,7 +296,7 @@ check_status() {
 }
 
 check_enabled() {
-    temp=$(systemctl is-enabled XrayR)
+    temp=$(systemctl is-enabled Aiko)
     if [[ x"${temp}" == x"enabled" ]]; then
         return 0
     else
@@ -308,7 +308,7 @@ check_uninstall() {
     check_status
     if [[ $? != 2 ]]; then
         echo ""
-        echo -e "${red}XrayR đã được cài đặt, vui lòng không cài đặt lại${plain}"
+        echo -e "${red}Aiko đã được cài đặt, vui lòng không cài đặt lại${plain}"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -322,7 +322,7 @@ check_install() {
     check_status
     if [[ $? == 2 ]]; then
         echo ""
-        echo -e "${red}Vui lòng cài đặt XrayR trước${plain}"
+        echo -e "${red}Vui lòng cài đặt Aiko trước${plain}"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -336,15 +336,15 @@ show_status() {
     check_status
     case $? in
         0)
-            echo -e "Trạng thái XrayR: ${green}đã được chạy${plain}"
+            echo -e "Trạng thái Aiko: ${green}đã được chạy${plain}"
             show_enable_status
             ;;
         1)
-            echo -e "Trạng thái XrayR: ${yellow}không chạy${plain}"
+            echo -e "Trạng thái Aiko: ${yellow}không chạy${plain}"
             show_enable_status
             ;;
         2)
-            echo -e "Trạng thái XrayR: ${red}Chưa cài đặt${plain}"
+            echo -e "Trạng thái Aiko: ${red}Chưa cài đặt${plain}"
     esac
 }
 
@@ -357,9 +357,9 @@ show_enable_status() {
     fi
 }
 
-show_XrayR_version() {
-    echo -n "Phiên bản XrayR："
-    /usr/local/XrayR/XrayR -version
+show_Aiko_version() {
+    echo -n "Phiên bản Aiko："
+    /usr/local/Aiko/Aiko -version
     echo ""
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -368,34 +368,34 @@ show_XrayR_version() {
 
 show_usage() {
     echo -e ""
-    echo "  Cách sử dụng tập lệnh quản lý XrayR     " 
+    echo "  Cách sử dụng tập lệnh quản lý Aiko     " 
     echo "------------------------------------------"
-    echo "           XrayR   - Show admin menu      "
-    echo "         AikoXrayR - XrayR by AikoCute    "
+    echo "           Aiko   - Show admin menu      "
+    echo "         AikoAiko - Aiko by AikoCute    "
     echo "------------------------------------------"
 }
 
 show_menu() {
     echo -e "
-  ${green}XrayR Các tập lệnh quản lý phụ trợ，${plain}${red}không hoạt động với docker${plain}
---- https://github.com/XrayR-project/XrayR ---
+  ${green}Aiko Các tập lệnh quản lý phụ trợ，${plain}${red}không hoạt động với docker${plain}
+--- https://github.com/Aiko-project/Aiko ---
   ${green}0.${plain} Setting Config
 ————————————————
-  ${green}1.${plain} Cài đặt XrayR
-  ${green}2.${plain} Cập nhật XrayR
-  ${green}3.${plain} Gỡ cài đặt XrayR
+  ${green}1.${plain} Cài đặt Aiko
+  ${green}2.${plain} Cập nhật Aiko
+  ${green}3.${plain} Gỡ cài đặt Aiko
 ————————————————
-  ${green}4.${plain} Khởi động XrayR
-  ${green}5.${plain} Dừng XrayR
-  ${green}6.${plain} Khởi động lại XrayR
-  ${green}7.${plain} Xem trạng thái XrayR
-  ${green}8.${plain} Xem nhật ký XrayR
+  ${green}4.${plain} Khởi động Aiko
+  ${green}5.${plain} Dừng Aiko
+  ${green}6.${plain} Khởi động lại Aiko
+  ${green}7.${plain} Xem trạng thái Aiko
+  ${green}8.${plain} Xem nhật ký Aiko
 ————————————————
-  ${green}9.${plain} Đặt XrayR để bắt đầu tự động
- ${green}10.${plain} Hủy tự động khởi động XrayR
+  ${green}9.${plain} Đặt Aiko để bắt đầu tự động
+ ${green}10.${plain} Hủy tự động khởi động Aiko
 ————————————————
  ${green}11.${plain} Một cú nhấp chuột cài đặt bbr (hạt nhân mới nhất)
- ${green}12.${plain} Xem các phiên bản XrayR 
+ ${green}12.${plain} Xem các phiên bản Aiko 
  ${green}13.${plain} Nâng cấp Tập lệnh Bảo trì
  "
  # Cập nhật tiếp theo có thể được thêm vào chuỗi trên
@@ -427,7 +427,7 @@ show_menu() {
         ;;
         11) install_bbr
         ;;
-        12) check_install && show_XrayR_version
+        12) check_install && show_Aiko_version
         ;;
         13) update_shell
         ;;
@@ -463,7 +463,7 @@ if [[ $# > 0 ]]; then
         ;;
         "uninstall") check_install 0 && uninstall 0
         ;;
-        "version") check_install 0 && show_XrayR_version 0
+        "version") check_install 0 && show_Aiko_version 0
         ;;
         "update_shell") update_shell
         ;;

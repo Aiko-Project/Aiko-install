@@ -109,20 +109,20 @@ install_Aiko() {
 	cd /usr/local/Aiko/
     
     if  [ $# == 0 ] ;then
-        last_version=$(curl -Ls "https://api.github.com/repos/AikoAiko-Project/Aiko/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        last_version=$(curl -Ls "https://api.github.com/repos/Aiko-Project/Aiko/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$last_version" ]]; then
             echo -e "${red}Phát hiện phiên bản Aiko không thành công, có thể vượt quá giới hạn GIthub API, vui lòng thử lại sau hoặc chỉ định cài đặt phiên bản Aiko theo cách thủ công${plain}"
             exit 1
         fi
         echo -e "Phiên bản mới nhất của Aiko đã được phát hiện：${last_version}，Bắt đầu cài đặt"
-        wget -N --no-check-certificate -O /usr/local/Aiko/Aiko-linux.zip https://github.com/AikoAiko-Project/Aiko/releases/download/1.0.2/Aiko-linux-${arch}.zip
+        wget -N --no-check-certificate -O /usr/local/Aiko/Aiko-linux.zip https://github.com/Aiko-Project/Aiko/releases/download/${last_version}/Aiko-linux-${arch}.zip
         if [[ $? -ne 0 ]]; then
             echo -e "${red}Tải xuống Aiko thất bại, hãy chắc chắn rằng máy chủ của bạn có thể tải về các tập tin Github${plain}"
             exit 1
         fi
     else
         last_version=$1
-        url="https://github.com/AikoAiko-Project/Aiko/releases/download/1.0.2/Aiko-linux-${arch}.zip"
+        url="https://github.com/Aiko-Project/Aiko/releases/download/${last_version}/Aiko-linux-${arch}.zip"
         echo -e "Bắt đầu cài đặt Aiko v$1"
         wget -N --no-check-certificate -O /usr/local/Aiko/Aiko-linux.zip ${url}
         if [[ $? -ne 0 ]]; then
@@ -136,7 +136,7 @@ install_Aiko() {
     chmod +x Aiko
     mkdir /etc/Aiko/ -p
     rm /etc/systemd/system/Aiko.service -f
-    file="https://raw.githubusercontent.com/AikoAiko-Project/AikoAiko-install/main/Aiko.service"
+    file="https://raw.githubusercontent.com/Aiko-Project/Aiko-install/main/Aiko.service"
     wget -N --no-check-certificate -O /etc/systemd/system/Aiko.service ${file}
     #cp -f Aiko.service /etc/systemd/system/
     systemctl daemon-reload
@@ -149,7 +149,7 @@ install_Aiko() {
     if [[ ! -f /etc/Aiko/config.yml ]]; then
         cp config.yml /etc/Aiko/
         echo -e ""
-        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/AikoCute/Aiko，Định cấu hình nội dung cần thiết"
+        echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/Aiko-Project/Aiko，Định cấu hình nội dung cần thiết"
     else
         systemctl start Aiko
         sleep 2
@@ -171,7 +171,7 @@ install_Aiko() {
     if [[ ! -f /etc/Aiko/custom_outbound.json ]]; then
         cp custom_outbound.json /etc/Aiko/
     fi
-    curl -o /usr/bin/Aiko -Ls https://raw.githubusercontent.com/AikoCute/AikoAiko-install/master/Aiko.sh
+    curl -o /usr/bin/Aiko -Ls https://raw.githubusercontent.com/Aiko-Project/Aiko-install/master/Aiko.sh
     chmod +x /usr/bin/Aiko
     ln -s /usr/bin/Aiko /usr/bin/Aiko # chữ thường tương thích
     chmod +x /usr/bin/Aiko

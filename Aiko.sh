@@ -121,7 +121,7 @@ update() {
 
 config() {
     echo "Aiko sẽ tự động khởi động lại sau khi sửa đổi cấu hình"
-    nano /etc/Aiko/config.yml
+    nano /etc/Aiko/aiko.yml
     sleep 2
     check_status
     case $? in

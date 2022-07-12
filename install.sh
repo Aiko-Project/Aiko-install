@@ -146,8 +146,8 @@ install_Aiko() {
     cp geoip.dat /etc/Aiko/
     cp geosite.dat /etc/Aiko/ 
 
-    if [[ ! -f /etc/Aiko/config.yml ]]; then
-        cp config.yml /etc/Aiko/
+    if [[ ! -f /etc/Aiko/aiko.yml ]]; then
+        cp aiko.yml /etc/Aiko/
         echo -e ""
         echo -e "Cài đặt mới, vui lòng tham khảo hướng dẫn trước：https://github.com/Aiko-Project/Aiko，Định cấu hình nội dung cần thiết"
     else
